@@ -67,3 +67,15 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .heading {
+    @apply font-medium;
+  }
+  .description {
+    @apply text-sm text-muted-foreground;
+  }
+  .card {
+    @apply flex flex-col gap-4 bg-background p-4 md:border md:rounded-md shadow-sm;
+  }
+}
