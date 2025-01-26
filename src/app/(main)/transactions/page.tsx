@@ -1,17 +1,15 @@
 "use client";
 
-import { TransactionCard } from "@/components/transaction-card";
+import Link from "next/link";
+
 import { formatValue } from "@/lib/utils";
 import { useQuery } from "convex/react";
-import {
-  ChevronLeftIcon,
-  CircleArrowDownIcon,
-  CircleArrowUpIcon,
-} from "lucide-react";
 import { api } from "../../../../convex/_generated/api";
 import { Doc } from "../../../../convex/_generated/dataModel";
-import Link from "next/link";
+
+import { TransactionCard } from "@/components/transaction-card";
 import { Separator } from "@/components/ui/separator";
+import { ChevronLeftIcon } from "lucide-react";
 
 export default function TransactionsPage() {
   const transactions = useQuery(api.transactions.get);
