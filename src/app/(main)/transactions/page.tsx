@@ -79,9 +79,7 @@ const TransactionsList = ({
       <h2 className="description">Entradas ({formatValue(totalIncome)})</h2>
 
       {incomeTransactions.length === 0 && (
-        <InfoBanner>
-          Nenhuma entrada encontrada. Adicione uma nova transação visualiza-las aqui.
-        </InfoBanner>
+        <InfoBanner>Nenhuma entrada encontrada.</InfoBanner>
       )}
 
       {incomeTransactions?.length !== 0 && (
@@ -95,10 +93,7 @@ const TransactionsList = ({
       <h2 className="description">Saídas ({formatValue(totalExpense)})</h2>
 
       {expenseTransactions.length === 0 && (
-        <InfoBanner>
-          Nenhuma transação de saída encontrada. Adicione uma nova transação de
-          saída.
-        </InfoBanner>
+        <InfoBanner>Nenhuma despesa encontrada.</InfoBanner>
       )}
 
       {expenseTransactions?.length !== 0 && (
