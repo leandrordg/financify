@@ -7,10 +7,10 @@ import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Doc } from "../../../../convex/_generated/dataModel";
 
+import { InfoBanner } from "@/components/info-banner";
 import { TransactionCard } from "@/components/transaction-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeftIcon, InfoIcon } from "lucide-react";
-import { InfoBanner } from "@/components/info-banner";
+import { ChevronLeftIcon } from "lucide-react";
 
 export default function TransactionsPage() {
   const transactions = useQuery(api.transactions.get);
