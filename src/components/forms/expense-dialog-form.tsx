@@ -229,7 +229,7 @@ export function ExpenseDialogForm({ setOpen }: Props) {
               <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
-                    <Button variant="outline">
+                    <Button variant="outline" className="font-normal">
                       {format(field.value, "PPP", { locale: ptBR })}
                       <CalendarIcon className="text-muted-foreground ml-auto" />
                     </Button>
