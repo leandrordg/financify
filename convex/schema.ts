@@ -16,6 +16,6 @@ export default defineSchema({
     paymentMethod: v.optional(v.string()), // Método de pagamento (cartão de crédito, débito, dinheiro, etc.)
     paymentParcels: v.optional(v.number()), // Quantidade de parcelas (caso a transação seja no crédito)
     transactionDate: v.number(), // Data da transação
-    userId: v.id("users"), // Referência para o usuário
-  }).index("by_userId", ["userId"]),
+    tokenIdentifier: v.string(), // Referência para o usuário
+  }).index("by_token", ["tokenIdentifier"]),
 });

@@ -1,7 +1,7 @@
 "use client";
 
-import { formatDateToNumber } from "@/lib/utils";
-import { api } from "../../../convex/_generated/api";
+import { useState } from "react";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
 import { format } from "date-fns";
@@ -9,9 +9,10 @@ import { ptBR } from "date-fns/locale";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { api } from "../../../convex/_generated/api";
 
+import { CustomDatePicker } from "@/components/custom-date-picker";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
@@ -54,6 +55,8 @@ interface Props {
 }
 
 export function ExpenseDialogForm({ setOpen }: Props) {
+  const [calendarOpen, setCalendarOpen] = useState(false);
+
   const create = useMutation(api.transactions.create);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -223,7 +226,7 @@ export function ExpenseDialogForm({ setOpen }: Props) {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Data da transação</FormLabel>
-              <Popover>
+              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button variant="outline">
@@ -232,20 +235,8 @@ export function ExpenseDialogForm({ setOpen }: Props) {
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent side="top">
-                  <Calendar
-                    mode="single"
-                    onSelect={(date) => {
-                      form.setValue(
-                        "transactionDate",
-                        formatDateToNumber(date)
-                      );
-                    }}
-                    initialFocus
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("2021-01-01")
-                    }
-                  />
+                <PopoverContent>
+                  <CustomDatePicker setOpen={setCalendarOpen} {...field} />
                 </PopoverContent>
               </Popover>
               <FormDescription>

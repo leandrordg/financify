@@ -76,6 +76,9 @@
     @apply text-sm text-muted-foreground;
   }
   .card {
-    @apply flex flex-col gap-4 bg-background p-4 md:border md:rounded-md shadow-sm;
+    @apply flex flex-col gap-2 bg-background border-y p-4 md:border-x md:rounded-md shadow-sm;
+  }
+  .grid-cols-2 > *:nth-last-child(1):nth-child(odd) {
+    grid-column: span 2 / span 2;
   }
 }

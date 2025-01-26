@@ -7,20 +7,30 @@ export const get = query({
 
     if (!identity) throw new ConvexError("Usuário não autenticado");
 
-    // Check if user already exists in the database
-    const user = await ctx.db
-      .query("users")
+    return await ctx.db
+      .query("transactions")
       .withIndex("by_token", (q) =>
         q.eq("tokenIdentifier", identity.tokenIdentifier)
       )
-      .unique();
+      .collect();
+  },
+});
 
-    if (!user) throw new ConvexError("Usuário não encontrado");
+export const getLastTransactions = query({
+  args: {
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, { limit }) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) throw new ConvexError("Usuário não autenticado");
 
     return await ctx.db
       .query("transactions")
-      .withIndex("by_userId", (q) => q.eq("userId", user._id))
-      .collect();
+      .withIndex("by_token", (q) =>
+        q.eq("tokenIdentifier", identity.tokenIdentifier)
+      )
+      .take(limit ?? 5);
   },
 });
 
@@ -78,7 +88,7 @@ export const create = mutation({
         paymentMethod,
         paymentParcels: isCredit ? parseFloat(paymentParcels) : undefined,
         transactionDate,
-        userId: newUser,
+        tokenIdentifier: identity.tokenIdentifier,
       });
     }
 
@@ -91,7 +101,7 @@ export const create = mutation({
       paymentMethod,
       paymentParcels: isCredit ? parseFloat(paymentParcels) : undefined,
       transactionDate,
-      userId: user._id,
+      tokenIdentifier: identity.tokenIdentifier,
     });
   },
 });

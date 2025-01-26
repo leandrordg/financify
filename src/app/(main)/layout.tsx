@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Controle os seus gastos de forma simples e eficiente",
 };
 
-export default function DashboardLayout({
+export default function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
