@@ -31,36 +31,34 @@ export function LastTransactions() {
 
   return (
     <article className="card">
-      <div className="flex items-center gap-4">
-        <Link href="/transactions" className="flex items-center gap-1 w-fit">
-          <h1 className="heading">Últimas transações</h1>
-
-          <ChevronRightIcon className="size-4" />
-        </Link>
+      <div className="flex flex-col md:flex-row md:items-center gap-4">
+        <div className="space-y-2">
+          <Link href='/transactions' className="heading flex items-center gap-2 w-fit">
+            Últimas transações <ChevronRightIcon className="size-4" />
+          </Link>
+          <p className="description">
+            Resumo das transações dos últimos 6 meses.
+          </p>
+        </div>
 
         <Select
           disabled={transactions?.length === 0}
           onValueChange={(value) => setLimit(Number(value))}
           defaultValue={String(limit)}
         >
-          <SelectTrigger className="ml-auto w-fit gap-2">
+          <SelectTrigger className="ml-auto md:w-fit gap-2">
             <SelectValue placeholder="Exibir transações" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Exibir transações</SelectLabel>
-              <SelectItem value="3">3</SelectItem>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="3">Últimas 3</SelectItem>
+              <SelectItem value="5">Últimas 5</SelectItem>
+              <SelectItem value="10">Últimas 10</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
       </div>
-
-      <p className="description">
-        Veja as suas últimas transações aqui. Você pode ver todas as suas
-        transações na página de transações.
-      </p>
 
       {transactions === undefined && (
         <div className="grid grid-cols-1 gap-4 xs:grid-cols-2 mt-2">

@@ -24,11 +24,11 @@
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
     --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --chart-1: 0 72% 60%;
+    --chart-2: 144 76% 60%;
+    --chart-3: 220 40% 50%;
+    --chart-4: 50 70% 50%;
+    --chart-5: 30 70% 50%;
   }
 
   .dark {
@@ -70,7 +70,7 @@
 
 @layer components {
   .heading {
-    @apply font-medium;
+    @apply font-medium leading-none tracking-tight;
   }
   .description {
     @apply text-sm text-muted-foreground;

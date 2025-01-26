@@ -1,5 +1,6 @@
 import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { Doc } from "./_generated/dataModel";
 
 export const get = query({
   handler: async (ctx) => {
@@ -32,6 +33,77 @@ export const getLastTransactions = query({
       )
       .order("desc")
       .take(limit ?? 5);
+  },
+});
+
+export const getTransactionsByMonths = query({
+  args: {
+    months: v.number(),
+  },
+  handler: async (ctx, { months }) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) throw new ConvexError("Usuário não autenticado");
+
+    const now = new Date();
+    const lastMonths = new Date(
+      now.getFullYear(),
+      now.getMonth() - months + 1,
+      1
+    ); // Início do mês correspondente
+
+    // get all transactions from the last months
+    const transactions = await ctx.db
+      .query("transactions")
+      .withIndex("by_token", (q) =>
+        q.eq("tokenIdentifier", identity.tokenIdentifier)
+      )
+      .filter((q) => q.gte(q.field("transactionDate"), lastMonths.getTime()))
+      .collect();
+
+    // obtain month names
+    const monthNames = Array.from({ length: months }, (_, i) => {
+      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      return date.toLocaleString("default", { month: "long" });
+    }).reverse(); // Reverse the array to show the most recent month first
+
+    // Group transactions by month
+    const groupedTransactions = transactions.reduce(
+      (
+        acc: {
+          [key: string]: {
+            expenses: Doc<"transactions">[];
+            incomes: Doc<"transactions">[];
+          };
+        },
+        transaction
+      ) => {
+        const date = new Date(transaction.transactionDate);
+        const month = date.toLocaleString("default", { month: "long" });
+
+        if (!acc[month]) {
+          acc[month] = { expenses: [], incomes: [] };
+        }
+
+        if (transaction.type === "expense") {
+          acc[month].expenses.push(transaction);
+        } else {
+          acc[month].incomes.push(transaction);
+        }
+
+        return acc;
+      },
+      {}
+    );
+
+    // grant that all months are present in the result
+    const result = monthNames.map((month) => ({
+      month,
+      expenses: groupedTransactions[month]?.expenses || [],
+      incomes: groupedTransactions[month]?.incomes || [],
+    }));
+
+    return result;
   },
 });
 
