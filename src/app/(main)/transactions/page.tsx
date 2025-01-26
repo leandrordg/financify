@@ -8,13 +8,13 @@ import { api } from "../../../../convex/_generated/api";
 import { Doc } from "../../../../convex/_generated/dataModel";
 
 import { TransactionCard } from "@/components/transaction-card";
-import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronLeftIcon } from "lucide-react";
 
 export default function TransactionsPage() {
   const transactions = useQuery(api.transactions.get);
 
-  if (!transactions) return null;
+  if (transactions === undefined) return <TransactionsSkeleton />;
 
   type Totals = {
     incomeTransactions: Doc<"transactions">[];
@@ -53,14 +53,12 @@ export default function TransactionsPage() {
 
   return (
     <main className="max-w-4xl mx-auto space-y-4 bg-muted/50 md:p-4 md:border-x min-h-dvh">
-      <section className="card">
-        <div className="px-4 pt-4 md:p-0">
-          <Link href="/dashboard" className="flex items-center gap-1 w-fit">
-            <ChevronLeftIcon className="size-4" />
+      <section className="card gap-4">
+        <Link href="/dashboard" className="flex items-center gap-1 w-fit">
+          <ChevronLeftIcon className="size-4" />
 
-            <h1 className="heading">Todas as transações</h1>
-          </Link>
-        </div>
+          <h1 className="heading">Todas as transações</h1>
+        </Link>
 
         <h2 className="description">Entradas ({formatValue(totalIncome)})</h2>
 
@@ -72,8 +70,6 @@ export default function TransactionsPage() {
             <TransactionCard key={transaction._id} transaction={transaction} />
           ))}
         </div>
-
-        <Separator orientation="horizontal" className="my-4" />
 
         <h2 className="description">Despesas ({formatValue(totalExpense)})</h2>
 
@@ -92,3 +88,19 @@ export default function TransactionsPage() {
     </main>
   );
 }
+
+const TransactionsSkeleton = () => (
+  <main className="max-w-4xl mx-auto space-y-4 bg-muted/50 md:p-4 md:border-x min-h-dvh">
+    <div className="card gap-4">
+      <Skeleton className="w-36 h-4" />
+      <Skeleton className="w-48 h-4" />
+      <Skeleton className="w-full h-12" />
+      <Skeleton className="w-full h-12" />
+      <Skeleton className="w-full h-12" />
+      <Skeleton className="w-48 h-4" />
+      <Skeleton className="w-full h-12" />
+      <Skeleton className="w-full h-12" />
+      <Skeleton className="w-full h-12" />
+    </div>
+  </main>
+);

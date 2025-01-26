@@ -16,8 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronRightIcon } from "lucide-react";
-import { Skeleton } from "./ui/skeleton";
 
 export function LastTransactions() {
   const [limit, setLimit] = useQueryState(

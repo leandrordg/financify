@@ -15,7 +15,7 @@ interface Props {
 
 export function TransactionCard({ transaction }: Props) {
   return (
-    <div className="flex flex-col md:flex-row md:items-center gap-2 border px-4 py-2 rounded-lg bg-background">
+    <div className="flex flex-col md:flex-row md:items-center gap-1.5 md:gap-4 border px-4 py-2 rounded-lg bg-background">
       {transaction.type === "income" ? (
         <CircleArrowUpIcon className="text-green-600" />
       ) : (

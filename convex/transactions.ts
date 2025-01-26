@@ -30,6 +30,7 @@ export const getLastTransactions = query({
       .withIndex("by_token", (q) =>
         q.eq("tokenIdentifier", identity.tokenIdentifier)
       )
+      .order("desc")
       .take(limit ?? 5);
   },
 });

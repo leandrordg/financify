@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { ConvexClientProvider } from "@/components/convex-client-provider";
+import { Header } from "@/components/header";
 
 export const metadata: Metadata = {
   title: "Financify - Dashboard",
@@ -12,5 +13,10 @@ export default function MainLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <ConvexClientProvider>{children}</ConvexClientProvider>;
+  return (
+    <ConvexClientProvider>
+      <Header />
+      {children}
+    </ConvexClientProvider>
+  );
 }
