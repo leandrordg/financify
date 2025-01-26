@@ -93,7 +93,7 @@ export function ExpenseDialogForm({ setOpen }: Props) {
             <FormItem>
               <FormLabel>Nome da despesa</FormLabel>
               <FormControl>
-                <Input placeholder="Digite o nome" {...field} />
+                <Input type="text" placeholder="Digite o nome" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
