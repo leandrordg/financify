@@ -33,11 +33,14 @@ export function LastTransactions() {
     <article className="card">
       <div className="flex flex-col md:flex-row md:items-center gap-4">
         <div className="space-y-2">
-          <Link href='/transactions' className="heading flex items-center gap-2 w-fit">
+          <Link
+            href="/transactions"
+            className="heading flex items-center gap-2 w-fit"
+          >
             Últimas transações <ChevronRightIcon className="size-4" />
           </Link>
           <p className="description">
-            Resumo das transações dos últimos 6 meses.
+            Veja as últimas {limit} transações registradas no sistema.
           </p>
         </div>
 

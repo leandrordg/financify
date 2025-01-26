@@ -38,7 +38,7 @@ export function CreateTransactionDialog({
         <Tabs defaultValue="income">
           <TabsList>
             <TabsTrigger value="income">Entrada</TabsTrigger>
-            <TabsTrigger value="expense">Despesa</TabsTrigger>
+            <TabsTrigger value="expense">Saída</TabsTrigger>
           </TabsList>
           <TabsContent value="income">
             <IncomeDialogForm setOpen={setOpen} />

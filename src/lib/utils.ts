@@ -14,7 +14,7 @@ export function formatTransactionType(type: string) {
     case "income":
       return "Entrada";
     case "expense":
-      return "Despesa";
+      return "Saída";
     default:
       return type;
   }

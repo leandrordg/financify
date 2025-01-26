@@ -1,4 +1,4 @@
-import { CreateTransactionDialog } from "@/components/create-transaction-dialog";
+import { CreateTransactionDialog } from "@/components/dialogs/create-transaction-dialog";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftRightIcon } from "lucide-react";
 

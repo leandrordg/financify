@@ -1,5 +1,5 @@
+import { CustomOverviewBarChart } from "@/components/charts/custom-overview-bar-chart";
 import { CreateTransaction } from "@/components/create-transaction";
-import { CustomOverviewBarChart } from "@/components/custom-overview-bar-chart";
 import { LastTransactions } from "@/components/last-transactions";
 
 export default function DashboardPage() {

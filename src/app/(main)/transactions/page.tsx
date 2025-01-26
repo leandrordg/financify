@@ -9,13 +9,36 @@ import { Doc } from "../../../../convex/_generated/dataModel";
 
 import { TransactionCard } from "@/components/transaction-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeftIcon } from "lucide-react";
+import { ChevronLeftIcon, InfoIcon } from "lucide-react";
+import { InfoBanner } from "@/components/info-banner";
 
 export default function TransactionsPage() {
   const transactions = useQuery(api.transactions.get);
 
-  if (transactions === undefined) return <TransactionsSkeleton />;
+  return (
+    <main className="max-w-4xl mx-auto space-y-4 bg-muted/50 md:p-4 md:border-x min-h-dvh py-4">
+      <article className="card gap-4">
+        <Link href="/dashboard" className="flex items-center gap-1 w-fit">
+          <ChevronLeftIcon className="size-4" />
 
+          <h1 className="heading">Todas as transações</h1>
+        </Link>
+
+        {transactions === undefined ? (
+          <TransactionsSkeleton />
+        ) : (
+          <TransactionsList transactions={transactions} />
+        )}
+      </article>
+    </main>
+  );
+}
+
+const TransactionsList = ({
+  transactions,
+}: {
+  transactions: Doc<"transactions">[];
+}) => {
   type Totals = {
     incomeTransactions: Doc<"transactions">[];
     expenseTransactions: Doc<"transactions">[];
@@ -52,55 +75,52 @@ export default function TransactionsPage() {
     };
 
   return (
-    <main className="max-w-4xl mx-auto space-y-4 bg-muted/50 md:p-4 md:border-x min-h-dvh">
-      <section className="card gap-4">
-        <Link href="/dashboard" className="flex items-center gap-1 w-fit">
-          <ChevronLeftIcon className="size-4" />
+    <section className="flex flex-col gap-4">
+      <h2 className="description">Entradas ({formatValue(totalIncome)})</h2>
 
-          <h1 className="heading">Todas as transações</h1>
-        </Link>
+      {incomeTransactions.length === 0 && (
+        <InfoBanner>
+          Nenhuma entrada encontrada. Adicione uma nova transação visualiza-las aqui.
+        </InfoBanner>
+      )}
 
-        <h2 className="description">Entradas ({formatValue(totalIncome)})</h2>
-
-        <div className="flex flex-col gap-2">
-          {incomeTransactions.length === 0 && (
-            <p className="description">Nenhuma entrada cadastrada.</p>
-          )}
+      {incomeTransactions?.length !== 0 && (
+        <div className="flex flex-col gap-4">
           {incomeTransactions?.map((transaction) => (
             <TransactionCard key={transaction._id} transaction={transaction} />
           ))}
         </div>
+      )}
 
-        <h2 className="description">Despesas ({formatValue(totalExpense)})</h2>
+      <h2 className="description">Saídas ({formatValue(totalExpense)})</h2>
 
-        <div className="flex flex-col gap-2">
-          {expenseTransactions.length === 0 && (
-            <p className="description">
-              Você não possui nenhuma despesa cadastrada. Parece que está tudo
-              em ordem!
-            </p>
-          )}
+      {expenseTransactions.length === 0 && (
+        <InfoBanner>
+          Nenhuma transação de saída encontrada. Adicione uma nova transação de
+          saída.
+        </InfoBanner>
+      )}
+
+      {expenseTransactions?.length !== 0 && (
+        <div className="flex flex-col gap-4">
           {expenseTransactions?.map((transaction) => (
             <TransactionCard key={transaction._id} transaction={transaction} />
           ))}
         </div>
-      </section>
-    </main>
+      )}
+    </section>
   );
-}
+};
 
 const TransactionsSkeleton = () => (
-  <main className="max-w-4xl mx-auto space-y-4 bg-muted/50 md:p-4 md:border-x min-h-dvh">
-    <div className="card gap-4">
-      <Skeleton className="w-36 h-4" />
-      <Skeleton className="w-48 h-4" />
-      <Skeleton className="w-full h-12" />
-      <Skeleton className="w-full h-12" />
-      <Skeleton className="w-full h-12" />
-      <Skeleton className="w-48 h-4" />
-      <Skeleton className="w-full h-12" />
-      <Skeleton className="w-full h-12" />
-      <Skeleton className="w-full h-12" />
-    </div>
-  </main>
+  <div className="flex flex-col gap-4">
+    <Skeleton className="w-48 h-4" />
+    <Skeleton className="w-full h-12" />
+    <Skeleton className="w-full h-12" />
+    <Skeleton className="w-full h-12" />
+    <Skeleton className="w-48 h-4" />
+    <Skeleton className="w-full h-12" />
+    <Skeleton className="w-full h-12" />
+    <Skeleton className="w-full h-12" />
+  </div>
 );

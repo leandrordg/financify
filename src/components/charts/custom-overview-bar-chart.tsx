@@ -4,7 +4,7 @@ import { formatMonth } from "@/lib/utils";
 import { useQuery } from "convex/react";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-import { api } from "../../convex/_generated/api";
+import { api } from "../../../convex/_generated/api";
 
 import {
   ChartConfig,
@@ -50,6 +50,10 @@ export function CustomOverviewBarChart() {
     expense: transaction.expenses.length,
   }));
 
+  const isDataEmpty =
+    chartData?.filter((data) => data.income !== 0 || data.expense !== 0)
+      .length === 0;
+
   return (
     <article className="card">
       <div className="flex flex-col md:flex-row md:items-center gap-4">
@@ -61,6 +65,7 @@ export function CustomOverviewBarChart() {
         </div>
 
         <Select
+          disabled={isDataEmpty}
           onValueChange={(value) => setMonths(Number(value))}
           defaultValue={String(months)}
         >
@@ -82,7 +87,7 @@ export function CustomOverviewBarChart() {
         <Skeleton className="h-44 sm:h-64 md:h-96 w-full mt-2 text-red-600" />
       )}
 
-      {transactions?.length !== 0 && (
+      {!isDataEmpty && (
         <ChartContainer config={chartConfig} className="mt-2">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
