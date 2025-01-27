@@ -1,28 +1,24 @@
 "use client";
 
-import Link from "next/link";
-
 import { formatValue } from "@/lib/utils";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { Doc } from "../../../../convex/_generated/dataModel";
 
+import { HistoryBack } from "@/components/history-back";
 import { InfoBanner } from "@/components/info-banner";
 import { TransactionCard } from "@/components/transaction-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeftIcon } from "lucide-react";
 
 export default function TransactionsPage() {
   const transactions = useQuery(api.transactions.get);
 
   return (
     <main className="max-w-4xl mx-auto space-y-4 bg-muted/50 md:p-4 md:border-x min-h-dvh py-4">
+      <HistoryBack />
+      
       <article className="card gap-4">
-        <Link href="/dashboard" className="flex items-center gap-1 w-fit">
-          <ChevronLeftIcon className="size-4" />
-
-          <h1 className="heading">Todas as transações</h1>
-        </Link>
+        <h1 className="heading">Todas as transações</h1>
 
         {transactions === undefined ? (
           <TransactionsSkeleton />

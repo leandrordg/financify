@@ -17,6 +17,28 @@ export const get = query({
   },
 });
 
+export const getById = query({
+  args: {
+    transactionId: v.id("transactions"),
+  },
+  handler: async (ctx, { transactionId }) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) throw new ConvexError("Usuário não autenticado");
+
+    const transaction = await ctx.db.get(transactionId);
+    if (!transaction) throw new ConvexError("Transação não encontrada");
+
+    const category = await ctx.db.get(transaction.categoryId);
+    if (!category) throw new ConvexError("Categoria não encontrada");
+
+    return {
+      ...transaction,
+      category,
+    };
+  },
+});
+
 export const getLast = query({
   args: {
     limit: v.optional(v.number()),
@@ -119,8 +141,16 @@ export const getByMonth = query({
     if (!identity) throw new ConvexError("Usuário não autenticado");
 
     const now = new Date();
-    const specificMonthStart = new Date(now.getFullYear(), now.getMonth() - (month - 1), 1);
-    const specificMonthEnd = new Date(now.getFullYear(), now.getMonth() - (month - 2), 1);
+    const specificMonthStart = new Date(
+      now.getFullYear(),
+      now.getMonth() - (month - 1),
+      1
+    );
+    const specificMonthEnd = new Date(
+      now.getFullYear(),
+      now.getMonth() - (month - 2),
+      1
+    );
 
     // return only transactions for the selected month
     return await ctx.db

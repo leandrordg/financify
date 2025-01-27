@@ -78,7 +78,7 @@ export function NewCategoryForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-2">
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <section className="grid list grid-cols-1 md:grid-cols-2 gap-4">
           {fields.map((field, index) => (
             <div key={field.id} className="flex flex-col gap-2">
               <FormField

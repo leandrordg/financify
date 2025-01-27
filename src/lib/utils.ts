@@ -9,7 +9,7 @@ export function formatDateToNumber(date: Date | undefined) {
   return date ? date.getTime() : new Date().getTime();
 }
 
-export function formatTransactionType(type: string) {
+export function formatTransactionType(type: string | undefined) {
   switch (type) {
     case "income":
       return "Entrada";
