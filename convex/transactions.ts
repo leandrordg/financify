@@ -1,6 +1,6 @@
 import { ConvexError, v } from "convex/values";
+import { Doc, Id } from "./_generated/dataModel";
 import { mutation, query } from "./_generated/server";
-import { Doc } from "./_generated/dataModel";
 
 export const get = query({
   handler: async (ctx) => {
@@ -50,7 +50,7 @@ export const getTransactionsByMonths = query({
       now.getFullYear(),
       now.getMonth() - months + 1,
       1
-    ); // Início do mês correspondente
+    );
 
     // get all transactions from the last months
     const transactions = await ctx.db
@@ -65,9 +65,9 @@ export const getTransactionsByMonths = query({
     const monthNames = Array.from({ length: months }, (_, i) => {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
       return date.toLocaleString("default", { month: "long" });
-    }).reverse(); // Reverse the array to show the most recent month first
+    }).reverse(); // reverse the array to show the most recent month first
 
-    // Group transactions by month
+    // group transactions by month
     const groupedTransactions = transactions.reduce(
       (
         acc: {
@@ -81,10 +81,12 @@ export const getTransactionsByMonths = query({
         const date = new Date(transaction.transactionDate);
         const month = date.toLocaleString("default", { month: "long" });
 
+        // create month if it does not exist
         if (!acc[month]) {
           acc[month] = { expenses: [], incomes: [] };
         }
 
+        // add transaction to the respective type
         if (transaction.type === "expense") {
           acc[month].expenses.push(transaction);
         } else {
@@ -137,7 +139,7 @@ export const create = mutation({
     // thats because if user set to credit, change the parcels and after back to cash or any other payment method, the parcels will still set
     const isCredit = !!(paymentMethod === "credit" && paymentParcels);
 
-    // Check if user already exists in the database
+    // check if user already exists in the database
     const user = await ctx.db
       .query("users")
       .withIndex("by_token", (q) =>
@@ -145,9 +147,9 @@ export const create = mutation({
       )
       .unique();
 
-    // If user does not exist in the db, create a new one and a new transaction
+    // if user does not exist in the db, create a new one and a new transaction
     if (!user) {
-      const newUser = await ctx.db.insert("users", {
+      await ctx.db.insert("users", {
         name: identity.name ?? "Anônimo",
         email: identity.email ?? "N/A",
         tokenIdentifier: identity.tokenIdentifier,
@@ -156,25 +158,25 @@ export const create = mutation({
       return await ctx.db.insert("transactions", {
         name,
         type,
-        value: parseFloat(value),
-        category,
         paymentMethod,
-        paymentParcels: isCredit ? parseFloat(paymentParcels) : undefined,
         transactionDate,
-        tokenIdentifier: identity.tokenIdentifier,
+        value: parseFloat(value), // convert value to number
+        paymentParcels: isCredit ? parseFloat(paymentParcels) : undefined, // convert parcels to number
+        tokenIdentifier: identity.tokenIdentifier, // set user token
+        categoryId: category as Id<"categories">, // set category id
       });
     }
 
-    // If user exists in db, create a new transaction
+    // if user exists in db, create a new transaction
     return await ctx.db.insert("transactions", {
       name,
       type,
-      value: parseFloat(value),
-      category,
       paymentMethod,
-      paymentParcels: isCredit ? parseFloat(paymentParcels) : undefined,
       transactionDate,
-      tokenIdentifier: identity.tokenIdentifier,
+      value: parseFloat(value), // convert value to number
+      paymentParcels: isCredit ? parseFloat(paymentParcels) : undefined, // convert parcels to number
+      tokenIdentifier: identity.tokenIdentifier, // set user token
+      categoryId: category as Id<"categories">, // set category id
     });
   },
 });

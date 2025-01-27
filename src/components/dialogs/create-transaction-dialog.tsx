@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+
 import { ExpenseDialogForm } from "@/components/forms/expense-dialog-form";
 import { IncomeDialogForm } from "@/components/forms/income-dialog-form";
 import { Button } from "@/components/ui/button";
@@ -22,6 +25,8 @@ export function CreateTransactionDialog({
 }: {
   children: React.ReactNode;
 }) {
+  const data = useQuery(api.categories.get);
+
   const [open, setOpen] = useState(false);
 
   return (
@@ -41,10 +46,16 @@ export function CreateTransactionDialog({
             <TabsTrigger value="expense">Saída</TabsTrigger>
           </TabsList>
           <TabsContent value="income">
-            <IncomeDialogForm setOpen={setOpen} />
+            <IncomeDialogForm
+              setOpen={setOpen}
+              categories={data?.incomeCategories}
+            />
           </TabsContent>
           <TabsContent value="expense">
-            <ExpenseDialogForm setOpen={setOpen} />
+            <ExpenseDialogForm
+              setOpen={setOpen}
+              categories={data?.expenseCategories}
+            />
           </TabsContent>
         </Tabs>
 

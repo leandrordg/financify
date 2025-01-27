@@ -9,13 +9,23 @@ export default defineSchema({
   }).index("by_token", ["tokenIdentifier"]),
 
   transactions: defineTable({
-    name: v.string(), // Nome da transação
-    type: v.string(), // Tipo da transação (income, expense)
-    value: v.number(), // Valor da transação
-    category: v.string(), // Categoria da transação (alimentação, transporte, etc.)
-    paymentMethod: v.optional(v.string()), // Método de pagamento (cartão de crédito, débito, dinheiro, etc.)
-    paymentParcels: v.optional(v.number()), // Quantidade de parcelas (caso a transação seja no crédito)
-    transactionDate: v.number(), // Data da transação
-    tokenIdentifier: v.string(), // Referência para o usuário
-  }).index("by_token", ["tokenIdentifier"]),
+    name: v.string(),
+    type: v.string(),
+    value: v.number(),
+    paymentMethod: v.optional(v.string()),
+    paymentParcels: v.optional(v.number()),
+    transactionDate: v.number(),
+    tokenIdentifier: v.string(),
+    categoryId: v.id("categories"),
+  })
+    .index("by_token", ["tokenIdentifier"])
+    .index("by_category_id", ["categoryId"]),
+
+  categories: defineTable({
+    name: v.string(),
+    type: v.string(),
+    tokenIdentifier: v.string(),
+  })
+    .index("by_token", ["tokenIdentifier"])
+    .index("by_name", ["name"]),
 });

@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { api } from "../../../convex/_generated/api";
+import { Doc } from "../../../convex/_generated/dataModel";
 
 import { CustomDatePicker } from "@/components/custom-date-picker";
 import { Button } from "@/components/ui/button";
@@ -35,7 +36,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CalendarIcon, CheckCircleIcon } from "lucide-react";
+import { CalendarIcon, CheckCircleIcon, CirclePlusIcon } from "lucide-react";
+import Link from "next/link";
 
 const formSchema = z.object({
   name: z.string().min(1, "Campo obrigatório."),
@@ -50,9 +52,10 @@ const formSchema = z.object({
 
 interface Props {
   setOpen: (open: boolean) => void;
+  categories: Doc<"categories">[] | undefined;
 }
 
-export function IncomeDialogForm({ setOpen }: Props) {
+export function IncomeDialogForm({ setOpen, categories }: Props) {
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   const create = useMutation(api.transactions.create);
@@ -122,9 +125,23 @@ export function IncomeDialogForm({ setOpen }: Props) {
                 </FormControl>
                 {/* TODO: add dynamic categories */}
                 <SelectContent>
-                  <SelectItem value="salary">Salário</SelectItem>
-                  <SelectItem value="bonus">Bônus</SelectItem>
-                  <SelectItem value="others">Outros</SelectItem>
+                  {categories?.map((category) => (
+                    <SelectItem key={category._id} value={category._id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full justify-start text-sm font-normal py-1.5 px-2 cursor-default"
+                    asChild
+                  >
+                    <Link href="/categories/new">
+                      Adicionar nova categoria
+                      <CirclePlusIcon className="ml-auto" />
+                    </Link>
+                  </Button>
                 </SelectContent>
               </Select>
               <FormMessage />

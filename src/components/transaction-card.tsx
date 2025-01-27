@@ -1,8 +1,4 @@
-import {
-  formatExpensePayment,
-  formatTransactionCategory,
-  formatValue,
-} from "@/lib/utils";
+import { formatExpensePayment, formatValue } from "@/lib/utils";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Doc } from "../../convex/_generated/dataModel";
@@ -33,20 +29,17 @@ export function TransactionCard({ transaction }: Props) {
       </div>
 
       <div className="mt-auto md:mt-0 md:ml-auto md:text-end">
-        <>
-          <p className="text-lg font-semibold md:text-sm">
-            {formatValue(transaction.value)}
-          </p>
-          <p className="text-xs text-muted-foreground">
-            {transaction.type === "expense"
-              ? formatExpensePayment(
-                  transaction.value,
-                  transaction.paymentMethod,
-                  transaction.paymentParcels
-                )
-              : formatTransactionCategory(transaction.category)}
-          </p>
-        </>
+        <p className="text-xs text-muted-foreground">
+          {transaction.type === "expense" &&
+            formatExpensePayment(
+              transaction.value,
+              transaction.paymentMethod,
+              transaction.paymentParcels
+            )}
+        </p>
+        <p className="text-lg font-semibold md:text-sm">
+          {formatValue(transaction.value)}
+        </p>
       </div>
     </div>
   );
