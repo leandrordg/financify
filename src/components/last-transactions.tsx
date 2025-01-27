@@ -25,7 +25,7 @@ export function LastTransactions() {
     parseAsInteger.withDefault(3)
   );
 
-  const transactions = useQuery(api.transactions.getLastTransactions, {
+  const transactions = useQuery(api.transactions.getLast, {
     limit,
   });
 
@@ -64,7 +64,7 @@ export function LastTransactions() {
       </div>
 
       {transactions === undefined && (
-        <div className="grid grid-cols-1 gap-4 xs:grid-cols-2 mt-2">
+        <div className="grid list grid-cols-1 gap-4 xs:grid-cols-2 mt-2">
           {Array.from({ length: limit }).map((_, index) => (
             <Skeleton key={index} className="w-full h-12" />
           ))}
@@ -72,7 +72,7 @@ export function LastTransactions() {
       )}
 
       {transactions?.length !== 0 && (
-        <div className="grid grid-cols-1 gap-4 xs:grid-cols-2 mt-2">
+        <div className="grid list grid-cols-1 gap-4 xs:grid-cols-2 mt-2">
           {transactions?.map((transaction) => (
             <TransactionCard key={transaction._id} transaction={transaction} />
           ))}

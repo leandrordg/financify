@@ -17,7 +17,7 @@ export const get = query({
   },
 });
 
-export const getLastTransactions = query({
+export const getLast = query({
   args: {
     limit: v.optional(v.number()),
   },
@@ -36,7 +36,7 @@ export const getLastTransactions = query({
   },
 });
 
-export const getTransactionsByMonths = query({
+export const getByMonths = query({
   args: {
     months: v.number(),
   },
@@ -106,6 +106,35 @@ export const getTransactionsByMonths = query({
     }));
 
     return result;
+  },
+});
+
+export const getByMonth = query({
+  args: {
+    month: v.number(),
+  },
+  handler: async (ctx, { month }) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) throw new ConvexError("Usuário não autenticado");
+
+    const now = new Date();
+    const specificMonthStart = new Date(now.getFullYear(), now.getMonth() - (month - 1), 1);
+    const specificMonthEnd = new Date(now.getFullYear(), now.getMonth() - (month - 2), 1);
+
+    // return only transactions for the selected month
+    return await ctx.db
+      .query("transactions")
+      .withIndex("by_token", (q) =>
+        q.eq("tokenIdentifier", identity.tokenIdentifier)
+      )
+      .filter((q) =>
+        q.and(
+          q.gte(q.field("transactionDate"), specificMonthStart.getTime()),
+          q.lt(q.field("transactionDate"), specificMonthEnd.getTime())
+        )
+      )
+      .collect();
   },
 });
 

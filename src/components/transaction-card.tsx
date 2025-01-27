@@ -37,7 +37,7 @@ export function TransactionCard({ transaction }: Props) {
               transaction.paymentParcels
             )}
         </p>
-        <p className="text-lg font-semibold md:text-sm">
+        <p className="text-lg md:text-base font-medium tracking-tighter">
           {formatValue(transaction.value)}
         </p>
       </div>
