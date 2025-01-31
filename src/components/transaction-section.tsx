@@ -12,14 +12,14 @@ interface Props {
   transactionId: Id<"transactions">;
 }
 
-export function Transaction({ transactionId }: Props) {
+export function TransactionSection({ transactionId }: Props) {
   const transaction = useQuery(api.transactions.getById, { transactionId });
 
   if (transaction === undefined) return <Skeleton className="w-full h-16" />;
 
   return (
     <article className="card gap-4">
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <h2 className="heading">{transaction.name}</h2>
 
         <p className="description">

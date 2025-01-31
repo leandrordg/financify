@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { cn, formatPaymentMethod, formatValue } from "@/lib/utils";
 import { useQuery } from "convex/react";
 import { parseAsInteger, useQueryState } from "nuqs";
@@ -17,10 +19,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ChevronRightIcon } from "lucide-react";
 
 export function MonthlyResume() {
   const [month, setMonth] = useQueryState(
-    "overviewChart",
+    "monthlyResume",
     parseAsInteger.withDefault(1)
   );
 
@@ -43,12 +46,13 @@ export function MonthlyResume() {
 
       return Array.from({ length: months }, (_, i) => {
         const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+
         return {
           label: date.toLocaleString("default", { month: "long" }),
-          value: date.getMonth() + 1,
+          value: i + 1,
           current: i === 0,
         };
-      }).reverse();
+      });
     },
   };
 
@@ -77,7 +81,12 @@ export function MonthlyResume() {
     <article className="card">
       <div className="flex flex-col md:flex-row md:items-center gap-4">
         <div className="space-y-2">
-          <h1 className="heading">Visão geral das transações</h1>
+          <Link
+            href="/resume"
+            className="heading flex items-center gap-2 w-fit"
+          >
+            Visão geral das transações <ChevronRightIcon className="size-4" />
+          </Link>
           <p className="description">
             Veja um resumo das suas transações do mês de {months.current}.
           </p>
@@ -137,7 +146,6 @@ export function MonthlyResume() {
               </div>
 
               <div>
-                {/* percentage */}
                 <p className="description">Entradas x Total</p>
                 <p
                   className={cn("price", {

@@ -30,6 +30,31 @@ export const get = query({
   },
 });
 
+export const getById = query({
+  args: {
+    categoryId: v.id("categories"),
+  },
+  handler: async (ctx, { categoryId }) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) throw new ConvexError("Usuário não autenticado");
+
+    const category = await ctx.db.get(categoryId);
+
+    if (!category) throw new ConvexError("Categoria não encontrada");
+
+    const transactions = await ctx.db
+      .query("transactions")
+      .withIndex("by_category_id", (q) => q.eq("categoryId", categoryId))
+      .collect();
+
+    return {
+      category,
+      transactions,
+    };
+  },
+});
+
 export const create = mutation({
   args: {
     categories: v.array(

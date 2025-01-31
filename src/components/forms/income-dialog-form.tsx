@@ -137,7 +137,7 @@ export function IncomeDialogForm({ setOpen, categories }: Props) {
                     className="w-full justify-start text-sm font-normal py-1.5 px-2 cursor-default"
                     asChild
                   >
-                    <Link href="/categories/new">
+                    <Link href="/new/category">
                       Adicionar nova categoria
                       <CirclePlusIcon className="ml-auto" />
                     </Link>
