@@ -1,225 +1,120 @@
+"use client";
+
 import Link from "next/link";
 
-import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { GitHub, Instagram, X } from "@/lib/icons";
+import { motion } from "framer-motion";
 
-import { Button } from "@/components/ui/button";
-import {
-  ArrowUpRight,
-  BarChart3,
-  ChevronRight,
-  PieChart,
-  Wallet,
-} from "lucide-react";
-
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
-        <div className="max-w-7xl mx-auto flex h-16 items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Wallet className="h-6 w-6 text-blue-600" />
-            <span className="text-xl font-bold text-blue-600">Financify</span>
-          </div>
-          <nav className="hidden md:flex items-center space-x-6">
-            <Link
-              href="#features"
-              className="text-sm font-medium hover:text-blue-600 transition-colors"
-            >
-              Features
-            </Link>
-            <Link
-              href="#testimonials"
-              className="text-sm font-medium hover:text-blue-600 transition-colors"
-            >
-              Testimonials
-            </Link>
-            <Link
-              href="#pricing"
-              className="text-sm font-medium hover:text-blue-600 transition-colors"
-            >
-              Pricing
-            </Link>
-          </nav>
-          <div className="flex items-center space-x-4">
-            <SignedOut>
-              <Link href="/sign-in">
-                <Button variant="ghost">Login</Button>
-              </Link>
-              <Link href="/dashboard">
-                <Button className="bg-blue-600 hover:bg-blue-700">
-                  Iniciar
-                </Button>
-              </Link>
-            </SignedOut>
-            <SignedIn>
-              <Link href="/dashboard">
-                <Button variant="outline">Dashboard</Button>
-              </Link>
-            </SignedIn>
-          </div>
+    <main className="min-h-dvh flex items-center justify-center">
+      <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#c9c9c905_1px,transparent_1px),linear-gradient(to_bottom,#4b4b4b05_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none -z-50" />
+
+      <motion.div
+        className="flex items-center justify-center gap-4 absolute top-0 left-0 right-0 p-4 md:p-8"
+        initial={{ opacity: 0, x: -40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      >
+        <div className="p-2 rounded-xl text-center border border-border w-full max-w-xl text-xs md:text-sm text-muted-foreground bg-transparent backdrop-blur-2xl">
+          Atualização: acesse a sua conta e veja as novidades do Financify.
+          <Link href="#" className="ml-1 text-green-500 hover:underline">
+            Saiba mais.
+          </Link>
         </div>
-      </header>
+      </motion.div>
 
-      <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative px-4">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-blue-100 -z-10" />
-          <div className="max-w-7xl mx-auto flex flex-col sm:items-center justify-center space-y-8 py-24 text-center md:py-32">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-              Gerencie suas finanças
-              <br />
-              <span className="text-blue-600">Com Confiança</span>
-            </h1>
-            <p className="max-w-[700px] text-lg text-muted-foreground sm:text-xl">
-              Assuma o controle de suas finanças pessoais com nosso abrangente
-              sistema de gestão. Acompanhe, planeje e aumente seu patrimônio em
-              um só lugar lugar.
-            </p>
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <Button
-                size="lg"
-                className="bg-blue-600 hover:bg-blue-700"
-                asChild
-              >
-                <Link href="/dashboard">
-                  Comece Agora
-                  <ChevronRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="#features">Saiba Mais</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section id="features" className="max-w-7xl mx-auto py-24 px-4">
-          <div className="flex flex-col items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Tudo o que você precisa para administrar seu dinheiro
-              </h2>
-              <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                Recursos poderosos para ajudá-lo a rastrear, analisar e otimizar
-                seu finanças.
-              </p>
-            </div>
-          </div>
-          <div className="mx-auto grid max-w-5xl gap-6 py-12 lg:grid-cols-3">
-            <div className="flex flex-col items-center space-y-4 rounded-lg border p-6 hover:border-blue-600 transition-colors text-center">
-              <BarChart3 className="h-12 w-12 text-blue-600" />
-              <h3 className="text-xl font-bold">Acompanhamento de despesas</h3>
-              <p className="text-muted-foreground">
-                Acompanhe suas despesas em tempo real e categoriza-as
-                automaticamente.
-              </p>
-            </div>
-            <div className="flex flex-col items-center space-y-4 rounded-lg border p-6 hover:border-blue-600 transition-colors text-center">
-              <PieChart className="h-12 w-12 text-blue-600" />
-              <h3 className="text-xl font-bold">
-                Planejamento Orçamentário Completo
-              </h3>
-              <p className="text-muted-foreground">
-                Crie e gerencie orçamentos que ajudam você a atingir seus
-                objetivos financeiros metas.
-              </p>
-            </div>
-            <div className="flex flex-col items-center space-y-4 rounded-lg border p-6 hover:border-blue-600 transition-colors text-center">
-              <ArrowUpRight className="h-12 w-12 text-blue-600" />
-              <h3 className="text-xl font-bold">
-                Acompanhamento de investimentos
-              </h3>
-              <p className="text-muted-foreground">
-                Monitore seus investimentos e acompanhe o desempenho do seu
-                portfólio.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Stats Section */}
-        <section className="bg-blue-600 py-16 text-white px-4">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid gap-8 md:grid-cols-3">
-              <div className="text-center">
-                <div className="text-4xl font-bold">10K+</div>
-                <div className="mt-2 text-blue-100">Usuários Ativos</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold">R$ 2M+</div>
-                <div className="mt-2 text-blue-100">Dinheiro rastreado</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold">98%</div>
-                <div className="mt-2 text-blue-100">Satisfação do Cliente</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="max-w-7xl mx-auto py-24 px-4">
-          <div className="flex flex-col sm:items-center justify-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Pronto para assumir o controle de suas finanças?
-              </h2>
-              <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl">
-                Junte-se a milhares de usuários que já gerenciam suas finanças
-                melhor com o Financify.
-              </p>
-            </div>
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <Button
-                size="lg"
-                className="bg-blue-600 hover:bg-blue-700"
-                asChild
-              >
-                <Link href="/dashboard">
-                  Comece Agora
-                  <ChevronRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="#contact">Entrar em contato</Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="border-t bg-background px-4">
-        <div className="max-w-7xl mx-auto flex flex-col gap-4 py-8 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center space-x-2">
-            <Wallet className="h-6 w-6 text-blue-600" />
-            <span className="text-xl font-bold text-blue-600">Financify</span>
-          </div>
-          <nav className="flex gap-4 md:gap-6">
+      <motion.div
+        className="relative text-foreground p-4 md:p-8 space-y-4 text-balance md:text-center"
+        initial={{ opacity: 0, y: 120 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.div
+          className="flex items-center md:justify-center gap-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+        >
+          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 1 }}>
             <Link
-              href="#terms"
-              className="text-sm hover:underline underline-offset-4"
+              target="_blank"
+              href="https://instagram.com/leandro.rodriguesz"
             >
-              Termos
+              <Instagram className="size-6 fill-muted-foreground hover:fill-foreground transition-colors duration-200" />
             </Link>
-            <Link
-              href="#privacy"
-              className="text-sm hover:underline underline-offset-4"
-            >
-              Privacidade
+          </motion.div>
+
+          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 1 }}>
+            <Link target="_blank" href="https://github.com/leandrordg">
+              <GitHub className="size-6 fill-muted-foreground hover:fill-foreground transition-colors duration-200" />
             </Link>
-            <Link
-              href="#contact"
-              className="text-sm hover:underline underline-offset-4"
-            >
-              Contato
+          </motion.div>
+
+          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 1 }}>
+            <Link target="_blank" href="https://x.com/bertalhiaa">
+              <X className="size-6 fill-muted-foreground hover:fill-foreground transition-colors duration-200" />
             </Link>
-          </nav>
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Financify. All rights reserved.
-          </p>
-        </div>
-      </footer>
-    </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.h1
+          className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter leading-tight"
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          Acompanhe suas finanças em tempo real
+          <motion.span
+            className="block text-4xl md:text-5xl lg:text-6xl bg-gradient-to-r from-green-500 to-emerald-700 text-transparent bg-clip-text drop-shadow-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            Torne-se Financify.
+          </motion.span>
+        </motion.h1>
+
+        <motion.p
+          className="md:text-lg max-w-2xl mx-auto text-muted-foreground"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
+          Organize seus ganhos e gastos de forma prática e intuitiva, com
+          atualização em tempo real para um controle simples e seguro das suas
+          finanças.
+        </motion.p>
+
+        <Link href="/dashboard">
+          <motion.button
+            className="mt-8 w-full max-w-sm px-8 py-2 bg-gradient-to-r from-emerald-700 to-green-500 text-white rounded-xl shadow-sm font-semibold cursor-pointer select-none"
+            whileHover={{
+              scale: 1.05,
+              transition: { duration: 0.4, ease: "easeInOut" },
+            }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.3 }}
+          >
+            Começar agora
+          </motion.button>
+        </Link>
+      </motion.div>
+
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 text-center p-4 md:p-8"
+        initial={{ opacity: 0, x: -40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      >
+        <Link
+          target="_blank"
+          href="https://github.com/leandrordg"
+          className="text-sm hover:underline text-muted-foreground"
+        >
+          Feito com ❤️ por Leandro Rodrigues.
+        </Link>
+      </motion.div>
+    </main>
   );
 }

@@ -1,6 +1,7 @@
+import "./globals.css";
+
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
@@ -15,15 +16,15 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Financify - Controle os seus gastos",
-  description: "Controle os seus gastos de forma simples e eficiente",
+  title: "Controle seus gastos com a Financify",
+  description: "Sistema de controle financeiro pessoal",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="pt-BR">
       <body className={`${inter.className} antialiased`}>
