@@ -57,14 +57,14 @@ export function formatPaymentMethod(method: string | undefined) {
       return "Pix";
     case "crypto":
       return "Criptomoeda";
-    case "credit":
-      return "Crédito";
+    case "card":
+      return "Cartão";
     case "debit":
       return "Débito";
     case "cash":
       return "Dinheiro";
     default:
-      return method;
+      return "Nenhum";
   }
 }
 

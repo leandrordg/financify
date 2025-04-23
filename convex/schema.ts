@@ -14,6 +14,7 @@ export default defineSchema({
     value: v.number(),
     paymentMethod: v.optional(v.string()),
     paymentParcels: v.optional(v.number()),
+    paymentParcelsWithInterest: v.optional(v.string()),
     transactionDate: v.number(),
     tokenIdentifier: v.string(),
     categoryId: v.id("categories"),

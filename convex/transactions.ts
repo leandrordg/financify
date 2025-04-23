@@ -176,6 +176,7 @@ export const create = mutation({
     category: v.string(),
     paymentMethod: v.optional(v.string()),
     paymentParcels: v.optional(v.string()),
+    paymentParcelsWithInterest: v.optional(v.string()),
     transactionDate: v.number(),
   },
   handler: async (
@@ -187,6 +188,7 @@ export const create = mutation({
       category,
       paymentMethod,
       paymentParcels,
+      paymentParcelsWithInterest,
       transactionDate,
     }
   ) => {
@@ -194,11 +196,6 @@ export const create = mutation({
 
     if (!identity) throw new ConvexError("Usuário não autenticado");
 
-    // check if payment is credit and if paymentParcels is set
-    // thats because if user set to credit, change the parcels and after back to cash or any other payment method, the parcels will still set
-    const isCredit = !!(paymentMethod === "credit" && paymentParcels);
-
-    // check if user already exists in the database
     const user = await ctx.db
       .query("users")
       .withIndex("by_token", (q) =>
@@ -206,36 +203,26 @@ export const create = mutation({
       )
       .unique();
 
-    // if user does not exist in the db, create a new one and a new transaction
     if (!user) {
       await ctx.db.insert("users", {
         name: identity.name ?? "Anônimo",
         email: identity.email ?? "N/A",
         tokenIdentifier: identity.tokenIdentifier,
       });
-
-      return await ctx.db.insert("transactions", {
-        name,
-        type,
-        paymentMethod,
-        transactionDate,
-        value: parseFloat(value), // convert value to number
-        paymentParcels: isCredit ? parseFloat(paymentParcels) : undefined, // convert parcels to number
-        tokenIdentifier: identity.tokenIdentifier, // set user token
-        categoryId: category as Id<"categories">, // set category id
-      });
     }
 
-    // if user exists in db, create a new transaction
     return await ctx.db.insert("transactions", {
       name,
       type,
       paymentMethod,
       transactionDate,
       value: parseFloat(value), // convert value to number
-      paymentParcels: isCredit ? parseFloat(paymentParcels) : undefined, // convert parcels to number
-      tokenIdentifier: identity.tokenIdentifier, // set user token
-      categoryId: category as Id<"categories">, // set category id
+      paymentParcels:
+        paymentMethod === "card" ? parseInt(paymentParcels ?? "0") : undefined,
+      paymentParcelsWithInterest:
+        paymentMethod === "card" ? paymentParcelsWithInterest : undefined,
+      tokenIdentifier: identity.tokenIdentifier,
+      categoryId: category as Id<"categories">,
     });
   },
 });

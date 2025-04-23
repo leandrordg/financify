@@ -47,8 +47,9 @@ const formSchema = z.object({
     .min(1, "Campo obrigatório.")
     .regex(/^[1-9]\d*(?:\.\d{0,2})?$/, "Valor inválido."), // only allow numbers more than 0
   category: z.string().min(1, "Campo obrigatório."),
-  paymentMethod: z.enum(["credit", "debit", "cash", "pix", "crypto"]),
+  paymentMethod: z.enum(["card", "debit", "cash", "pix", "crypto"]),
   paymentParcels: z.string().optional(),
+  paymentParcelsWithInterest: z.string().optional(),
   transactionDate: z.number(),
 });
 
@@ -71,6 +72,7 @@ export function ExpenseDialogForm({ setOpen, categories }: Props) {
       category: "",
       paymentMethod: "cash",
       paymentParcels: "",
+      paymentParcelsWithInterest: "",
       transactionDate: new Date().getTime(),
     },
   });
@@ -139,7 +141,7 @@ export function ExpenseDialogForm({ setOpen, categories }: Props) {
                   <SelectContent>
                     <SelectItem value="cash">Dinheiro</SelectItem>
                     <SelectItem value="pix">Pix</SelectItem>
-                    <SelectItem value="credit">Crédito</SelectItem>
+                    <SelectItem value="card">Cartão</SelectItem>
                     <SelectItem value="debit">Débito</SelectItem>
                     <SelectItem value="crypto">Criptomoeda</SelectItem>
                   </SelectContent>
@@ -150,45 +152,64 @@ export function ExpenseDialogForm({ setOpen, categories }: Props) {
           />
         </div>
 
-        {form.watch("paymentMethod") === "credit" && (
-          <FormField
-            control={form.control}
-            name="paymentParcels"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Parcelas</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione..." />
-                    </SelectTrigger>
-                  </FormControl>
-                  {/* TODO: add dynamic categories */}
-                  <SelectContent>
-                    {Array.from({ length: 12 }, (_, i) => {
-                      if (i === 0) {
-                        return (
-                          <SelectItem key={i} value="1">
-                            1x sem juros. (à vista)
-                          </SelectItem>
-                        );
-                      }
-
-                      return (
+        {form.watch("paymentMethod") === "card" && (
+          <div className="grid grid-cols-1 xs:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="paymentParcels"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Parcelas</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione..." />
+                      </SelectTrigger>
+                    </FormControl>
+                    {/* TODO: add dynamic categories */}
+                    <SelectContent>
+                      {Array.from({ length: 12 }, (_, i) => (
                         <SelectItem key={i} value={String(i + 1)}>
-                          {i + 1}x sem juros.
+                          Em {i + 1}x.
                         </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="paymentParcelsWithInterest"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Tipo de parcela</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione..." />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="noInterest">
+                        À vista (sem juros)
+                      </SelectItem>
+                      <SelectItem value="interest">Com juros</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         )}
 
         <FormField

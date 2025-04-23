@@ -75,7 +75,8 @@ export function MonthlyResume() {
         transactions?.filter((t) => t.paymentMethod === a).length
     )[0];
 
-  const incomePercentage = (values.total / values.totalIncome) * 100;
+  const incomePercentage =
+    values.totalIncome !== 0 ? (values.total / values.totalIncome) * 100 : 0;
 
   return (
     <article className="card">
